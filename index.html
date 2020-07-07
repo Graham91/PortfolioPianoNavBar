@@ -9,6 +9,62 @@
     <style>
         body {
             margin: 0px;
+            overflow-x: hidden;
+        }
+
+        .body1 {
+            top: 250px;
+            position: absolute;
+            margin: auto;
+            height: 500px;
+            width: 95%;
+            background-color: aqua;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .body2 {
+            top: 250px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+
+            height: 500px;
+            width: 95%;
+            background-color: blueviolet;
+        }
+
+        .body3 {
+            top: 250px;
+            position: absolute;
+            left: 0;
+            right: 0;
+            margin-left: auto;
+            margin-right: auto;
+            height: 500px;
+            width: 95%;
+            background-color: crimson;
+            left: 0px;
+        }
+
+
+        .left {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .right {
+            position: absolute;
+            right: -9999px;
+        }
+
+        .transition {
+            transition: ease-in-out;
+            transition-duration: 2s;
         }
 
         .navbar {
@@ -402,7 +458,7 @@
         <div class="navKeynonmove">
 
         </div>
-        <div class="navKey">
+        <div class="navKey" id=".body1">
             <div class="hoverShadow">
                 <div class="hoverShadow1"></div>
                 <div class="hoverShadow2"></div>
@@ -439,7 +495,7 @@
                 Portfolio
             </div>
         </div>
-        <div class="navKey">
+        <div class="navKey" id=".body2">
             <div class="hoverShadow">
                 <div class="hoverShadow1"></div>
                 <div class="hoverShadow2"></div>
@@ -475,7 +531,7 @@
                 Home
             </div>
         </div>
-        <div class="navKey">
+        <div class="navKey" id=".body3">
             <div class="hoverShadow">
                 <div class="hoverShadow1"></div>
                 <div class="hoverShadow2"></div>
@@ -521,9 +577,100 @@
         <div class="bottomshadowhider"></div>
 
     </div>
+    <div class="body1 transition left"> div1</div>
+    <div class="body2 transition">div2</div>
+    <div class="body3 transition right"> div3</div>
 
     <script>
         $(document).ready(function () {
+            let bodylocators = [".body1", ".body2", ".body3"];
+            let centerbody = bodylocators[1];
+            function aligndivs(clicked) {
+                let runOneOnly = true;
+                console.log(clicked);
+                if (centerbody === bodylocators[1]) {
+                    console.log("you are in body2");
+                    if (clicked === bodylocators[1]) {
+                        console.log("this should do nothing");
+                        runOneOnly = false;
+                        console.log(clicked);
+                    }
+                    if (clicked === bodylocators[2]) {
+                        console.log("this should move left");
+                        classadjustments(".body1", centerbody, ".body3", "moveleft");
+                        centerbody = bodylocators[2];
+                        runOneOnly = false;
+
+                    }
+                    if (clicked === bodylocators[0]) {
+                        console.log("this should move right");
+                        classadjustments(".body1", centerbody, ".body3", "moveright");
+                        centerbody = bodylocators[0];
+                        runOneOnly = false;
+
+                    }
+                }
+                if (runOneOnly === true) {
+                    console.log("you shouldn't be here");
+                    if (centerbody === bodylocators[2]) {
+                        if (clicked === bodylocators[2]) {
+                            runOneOnly = false;
+                        }
+                        if (clicked === bodylocators[1]) {
+                            classadjustments(".body2", centerbody, ".body1", "moveright");
+                            centerbody = bodylocators[1];
+                            runOneOnly = false;
+                        }
+                        if (clicked === bodylocators[0]) {
+                            classadjustments(".body2", centerbody, ".body1", "moveleft");
+                            centerbody = bodylocators[0];
+                            runOneOnly = false;
+                        }
+                    }
+                }
+                if (runOneOnly === true) {
+                    console.log("you shouldn't be here");
+                    if (centerbody === bodylocators[0]) {
+                        if (clicked === bodylocators[0]) {
+                        }
+                        if (clicked === bodylocators[2]) {
+                            classadjustments(".body3", centerbody, ".body2", "moveright");
+                            centerbody = bodylocators[2];
+                        }
+                        if (clicked === bodylocators[1]) {
+                            classadjustments(".body3", centerbody, ".body2", "moveleft");
+                            centerbody = bodylocators[1];
+                        }
+                    }
+                }
+                runOneOnly = true;
+            }
+
+            function classadjustments(left, center, right, direction) {
+                console.log("you shouldn't be here");
+                if (direction === "moveright") {
+                    $(center).addClass("right");
+                    $(left).removeClass("left");
+                    $(right).removeClass("transition");
+                    $(right).removeClass("right");
+                    $(right).addClass("left");
+                    setTimeout(function () {
+                        $(right).addClass("transition");
+                    }, 2000);
+
+                }
+                if (direction === "moveleft") {
+                    $(center).addClass("left");
+                    $(right).removeClass("right");
+                    $(left).removeClass("transition");
+                    $(left).removeClass("left");
+                    $(left).addClass("right");
+                    setTimeout(function () {
+                        $(left).addClass("transition");
+                    }, 2000);
+                }
+            }
+
             $(".navKey").hover(function () {
                 $(".hoverShadow", this).css("display", "block");
                 $(".hoverbottomshadow", this).css("display", "none");
@@ -555,8 +702,10 @@
                     $("#demotext", this).css("font-size", '1.95em');
                     $(this).css("height", "145px");
                     $(".clickShadow2", this).css("height", "120px");
+                    aligndivs(this.id);
                 })
                 .mousedown(function () {
+
                     $(".clickShadow", this).css("display", "block");
                     $(".hoverShadow", this).css("display", "none");
                     $(".hoverside", this).css("display", "none");
@@ -565,6 +714,7 @@
                     $("#demotext", this).css("font-size", '1.8em');
                     $(this).css("height", "140px");
                     $(".clickShadow2", this).css("height", "115px");
+
                 });
         });
     </script>
